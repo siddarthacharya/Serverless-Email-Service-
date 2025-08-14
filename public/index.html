@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email Sender</title>
+</head>
+
+<body>
+    <h2>Send Email</h2>
+    <form id="emailForm">
+        <input type="email" id="receiver_email" placeholder="Receiver Email" required><br><br>
+        <input type="text" id="subject" placeholder="Subject" required><br><br>
+        <textarea id="body_text" placeholder="Message" required></textarea><br><br>
+        <button type="submit">Send Email</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        document.getElementById("emailForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const data = {
+                receiver_email: document.getElementById("receiver_email").value,
+                subject: document.getElementById("subject").value,
+                body_text: document.getElementById("body_text").value
+            };
+            const res = await fetch("/send-email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            document.getElementById("response").innerText = result.message || result.error;
+        });
+    </script>
+</body>
+
+</html>
